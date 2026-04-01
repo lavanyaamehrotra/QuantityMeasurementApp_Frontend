@@ -1,0 +1,13 @@
+{
+  "name": "quantiverse-frontend",
+  "version": "1.0.0",
+  "description": "QuantiVerse Measurement Studio — standalone frontend",
+  "scripts": {
+    "start": "lite-server",
+    "dev": "lite-server"
+  },
+  "devDependencies": {
+    "lite-server": "^2.6.1",
+    "http-proxy-middleware": "^2.0.6"
+  }
+}
