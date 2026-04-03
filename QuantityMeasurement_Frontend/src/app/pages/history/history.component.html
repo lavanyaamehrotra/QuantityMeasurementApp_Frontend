@@ -1,0 +1,71 @@
+<div class="page active" id="historyPage">
+  <div class="page-header">
+    <h2 class="page-title">📋 HISTORY VAULT</h2>
+    <p class="page-sub">Your past calculations &amp; results</p>
+  </div>
+
+  <!-- Login prompt shown if not authenticated -->
+  <div *ngIf="!isLoggedIn" id="historyLoginPrompt" class="glass-card login-prompt-card">
+    <div class="lock-icon">🔒</div>
+    <h3>LOGIN REQUIRED</h3>
+    <p>Sign in or create an account to view and search your full calculation history.</p>
+    <div class="prompt-btn-row">
+      <button class="btn-primary" (click)="openLogin()">⚡ SIGN IN / REGISTER</button>
+    </div>
+  </div>
+
+  <!-- History content shown when authenticated -->
+  <div *ngIf="isLoggedIn" id="historyContent">
+    <div class="glass-card">
+      <div class="filter-bar">
+        <select [(ngModel)]="filterType" class="filter-select" (change)="onFilterTypeChange()">
+          <option value="me">MY HISTORY</option>
+          <option value="operation">BY OPERATION</option>
+          <option value="type">BY TYPE</option>
+          <option value="errored">ERRORS ONLY</option>
+        </select>
+        <select *ngIf="showFilterVal" [(ngModel)]="filterVal" class="filter-select">
+          <option *ngFor="let o of filterOptions" [value]="o">{{ o }}</option>
+        </select>
+        <button class="btn-primary btn-sm" id="fetchHistoryBtn" (click)="fetchHistory()" [disabled]="loading">
+          {{ loading ? '…' : 'FETCH' }}
+        </button>
+        <button *ngIf="showCountBtn" class="btn-secondary btn-sm" id="fetchCountBtn" (click)="fetchCount()">COUNT</button>
+        <span *ngIf="countBadge" id="countBadge" class="count-badge">{{ countBadge }}</span>
+      </div>
+    </div>
+
+    <!-- Skeleton loader -->
+    <div *ngIf="loading" id="historyList" class="history-list">
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line"></div>
+    </div>
+
+    <!-- No records -->
+    <div *ngIf="!loading && records.length === 0" id="historyList" class="history-list">
+      <div class="glass-card" style="text-align:center;padding:2rem;">📭 Click FETCH to load history</div>
+    </div>
+
+    <!-- Records list -->
+    <div *ngIf="!loading && records.length > 0" id="historyList" class="history-list">
+      <div *ngFor="let h of records" class="hist-item">
+        <div>
+          <strong>{{ h.Operation }}</strong>
+          <span style="opacity:0.55;font-size:0.7rem;"> {{ h.ThisMeasurementType || '' }}</span><br>
+          {{ h.ThisValue }} {{ h.ThisUnit }}
+          <span *ngIf="h.ThatValue != null"> ↔ {{ h.ThatValue }} {{ h.ThatUnit }}</span>
+        </div>
+        <div>
+          <span *ngIf="h.IsError">⚠️ {{ h.ErrorMessage }}</span>
+          <span *ngIf="!h.IsError">
+            ✔️ {{ h.ResultValue != null ? (h.ResultValue | number:'1.4-4') : (h.ResultString === 'true' ? 'EQUAL' : 'NOT EQUAL') }}
+            {{ h.ResultUnit || '' }}
+          </span>
+          <br>
+          <span style="font-size:0.6rem;opacity:0.55;">{{ formatTime(h.Timestamp) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

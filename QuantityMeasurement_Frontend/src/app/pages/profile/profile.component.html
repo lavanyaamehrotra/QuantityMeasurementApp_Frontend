@@ -1,0 +1,56 @@
+<div class="page active" id="profilePage">
+  <div class="page-header">
+    <h2 class="page-title">👤 PROFILE</h2>
+    <p class="page-sub">Your account information</p>
+  </div>
+
+  <!-- Login prompt shown if not authenticated -->
+  <div *ngIf="!isLoggedIn" id="profileLoginPrompt" class="glass-card login-prompt-card">
+    <div class="lock-icon">🔒</div>
+    <h3>LOGIN REQUIRED</h3>
+    <p>Sign in to view your profile details and session information.</p>
+    <div class="prompt-btn-row">
+      <button class="btn-primary" (click)="openLogin()">⚡ SIGN IN / REGISTER</button>
+    </div>
+  </div>
+
+  <!-- Profile content shown when authenticated -->
+  <div *ngIf="isLoggedIn && profile" id="profileContent" class="profile-grid">
+    <div class="glass-card profile-card">
+      <div class="avatar-large" id="profileAvatarBig">{{ avatarLetter }}</div>
+      <h3 id="profileFullName" class="profile-name">{{ profile.Username }}</h3>
+      <div class="profile-details">
+        <div class="profile-row">
+          <span class="profile-label">🆔 USER ID</span>
+          <span id="profileUserId" class="profile-value">{{ profile.Id }}</span>
+        </div>
+        <div class="profile-row">
+          <span class="profile-label">📧 EMAIL</span>
+          <span id="profileEmail" class="profile-value">{{ profile.Email }}</span>
+        </div>
+        <div class="profile-row">
+          <span class="profile-label">🎖️ ROLE</span>
+          <span id="profileRole" class="profile-value badge-role">{{ (profile.Role || 'USER').toUpperCase() }}</span>
+        </div>
+      </div>
+      <button class="btn-primary" id="refreshProfileBtn" (click)="refreshProfile()" [disabled]="loading">
+        {{ loading ? '⏳ REFRESHING…' : '⟳ REFRESH PROFILE' }}
+      </button>
+    </div>
+
+    <div class="glass-card session-card">
+      <h3 class="card-label">🔐 SESSION INFO</h3>
+      <div class="session-stats">
+        <div class="stat-box">
+          <span class="stat-label">STATUS</span>
+          <span id="tokenStatusMsg" class="stat-value">{{ tokenStatus }}</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">SESSION</span>
+          <span class="stat-value" id="sessionState">Active</span>
+        </div>
+      </div>
+      <div class="session-tip">💡 Your session is managed automatically. Login again if your session expires.</div>
+    </div>
+  </div>
+</div>

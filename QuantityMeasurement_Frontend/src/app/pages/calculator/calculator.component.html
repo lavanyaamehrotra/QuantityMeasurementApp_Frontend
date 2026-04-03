@@ -1,0 +1,111 @@
+<div class="page active" id="calcPage">
+  <div class="page-header">
+    <h1 class="page-title">▸ MEASUREMENT ENGINE</h1>
+    <p class="page-sub">Select type, pick operation, enter values — no login required</p>
+  </div>
+
+  <div class="grid-2">
+    <!-- Measurement Type -->
+    <div class="glass-card">
+      <h3 class="card-label">📌 MEASURE TYPE</h3>
+      <div class="chip-group" id="typeGroup">
+        <button *ngFor="let t of measurementTypes" class="chip"
+          [class.active]="selectedType===t" (click)="setType(t)">
+          {{ t === 'LENGTH' ? '📏 LENGTH' : t === 'WEIGHT' ? '⚖️ WEIGHT' : t === 'VOLUME' ? '🧪 VOLUME' : '🌡️ TEMP' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Operation -->
+    <div class="glass-card">
+      <h3 class="card-label">⚙️ OPERATION</h3>
+      <div class="op-grid" id="opGroup">
+        <div *ngFor="let op of operations" class="op-wrapper">
+          <button class="op-btn" [class.active]="selectedOp===op.key" (click)="setOp(op.key)">
+            {{ op.label }}
+          </button>
+          <div class="op-tooltip">
+            <div class="tooltip-title">{{ op.label }}</div>
+            <div class="tooltip-desc">{{ op.desc }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glass-card input-card">
+    <!-- CONVERT MODE -->
+    <div id="convertInputs" *ngIf="isConvert">
+      <div class="convert-row">
+        <div class="input-col">
+          <label>VALUE</label>
+          <input type="number" [(ngModel)]="val1" class="value-input" placeholder="0.00" step="any">
+        </div>
+        <div class="input-col">
+          <label>FROM UNIT</label>
+          <select [(ngModel)]="unit1" class="unit-select">
+            <option value="">— Select unit —</option>
+            <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+        <div class="convert-arrow">⇄</div>
+        <div class="input-col">
+          <label>TO UNIT</label>
+          <select [(ngModel)]="unit2" class="unit-select">
+            <option value="">— Select unit —</option>
+            <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- DUAL MODE -->
+    <div id="dualInputs" *ngIf="!isConvert">
+      <div class="dual-row">
+        <div class="dual-half">
+          <div class="input-col">
+            <label>VALUE 1</label>
+            <input type="number" [(ngModel)]="val1Dual" class="value-input" placeholder="0.00" step="any">
+          </div>
+          <div class="input-col">
+            <label>UNIT 1</label>
+            <select [(ngModel)]="unit1Dual" class="unit-select">
+              <option value="">— Select unit —</option>
+              <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="dual-sep">↔</div>
+        <div class="dual-half">
+          <div class="input-col">
+            <label>VALUE 2</label>
+            <input type="number" [(ngModel)]="val2Dual" class="value-input" placeholder="0.00" step="any">
+          </div>
+          <div class="input-col">
+            <label>UNIT 2</label>
+            <select [(ngModel)]="unit2Dual" class="unit-select">
+              <option value="">— Select unit —</option>
+              <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary exec-btn" id="calcExecBtn" (click)="calculate()" [disabled]="loading">
+      {{ loading ? '⏳ COMPUTING…' : '⚡ EXECUTE' }}
+    </button>
+    <div id="resultBlock" class="result-display">{{ resultText }}</div>
+    <div id="resultMeta" class="result-meta" *ngIf="resultMeta">{{ resultMeta }}</div>
+  </div>
+
+  <div class="glass-card">
+    <h3 class="card-label">📦 UNIT REFERENCE</h3>
+    <div class="ref-grid">
+      <div class="ref-chip"><span class="ref-type">LENGTH</span><span class="ref-units-list">FEET · INCH · YARD · CENTIMETER</span></div>
+      <div class="ref-chip"><span class="ref-type">WEIGHT</span><span class="ref-units-list">KILOGRAM · GRAM · POUND</span></div>
+      <div class="ref-chip"><span class="ref-type">VOLUME</span><span class="ref-units-list">LITRE · MILLILITRE · GALLON</span></div>
+      <div class="ref-chip"><span class="ref-type">TEMP</span><span class="ref-units-list">CELSIUS · FAHRENHEIT · KELVIN</span></div>
+    </div>
+  </div>
+</div>

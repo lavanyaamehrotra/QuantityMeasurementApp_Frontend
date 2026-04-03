@@ -1,0 +1,79 @@
+<div id="authModal" class="auth-modal-overlay" *ngIf="visible" (click)="close()">
+  <div class="auth-modal-box" (click)="$event.stopPropagation()">
+    <button class="auth-modal-close" (click)="close()">✕</button>
+    <div class="auth-modal-header">
+      <div class="brand-crunch">
+        <span class="badge-pill">v2.0</span>
+        <h1>QUANTI<span class="hero-accent">VERSE</span></h1>
+        <p class="hero-sub">sign in to access history &amp; profile</p>
+      </div>
+    </div>
+    <div class="auth-forms">
+      <button class="theme-toggle-btn" (click)="toggleTheme()">🌓</button>
+      <div class="auth-tab-bar">
+        <button class="auth-tab" [class.active]="activeTab==='login'" (click)="setTab('login')">LOGIN</button>
+        <button class="auth-tab" [class.active]="activeTab==='register'" (click)="setTab('register')">REGISTER</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="loginForm" class="auth-form" [class.active]="activeTab==='login'">
+        <div class="input-group">
+          <label>USERNAME</label>
+          <div class="input-wrapper">
+            <input type="text" [(ngModel)]="loginUser" placeholder="your handle">
+          </div>
+        </div>
+        <div class="input-group">
+          <label>PASSWORD</label>
+          <div class="input-wrapper">
+            <input [type]="showLoginPass ? 'text' : 'password'" [(ngModel)]="loginPass" placeholder="••••••••">
+            <button class="toggle-pwd" (click)="showLoginPass=!showLoginPass">👁️</button>
+          </div>
+        </div>
+        <div id="loginErr" class="error-msg" *ngIf="loginErr">{{ loginErr }}</div>
+        <button class="btn-primary" (click)="doLogin()" [disabled]="loading">
+          {{ loading ? '…' : '➤ SIGN IN' }}
+        </button>
+        <div class="google-divider"><span>OR CONTINUE WITH</span></div>
+        <div id="googleSignInBtn" class="google-btn-wrap"></div>
+        <p class="switch-prompt">No account? <button class="switch-link" (click)="setTab('register')">create one</button></p>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="registerForm" class="auth-form" [class.active]="activeTab==='register'">
+        <div class="input-group">
+          <label>USERNAME</label>
+          <div class="input-wrapper">
+            <input type="text" [(ngModel)]="regUser" placeholder="unique name">
+          </div>
+        </div>
+        <div class="input-group">
+          <label>EMAIL</label>
+          <div class="input-wrapper">
+            <input type="email" [(ngModel)]="regEmail" placeholder="user@domain.com">
+          </div>
+        </div>
+        <div class="input-group">
+          <label>PASSWORD</label>
+          <div class="input-wrapper">
+            <input [type]="showRegPass ? 'text' : 'password'" [(ngModel)]="regPass" placeholder="min 6 chars"
+              (input)="updateStrength(regPass)">
+            <button class="toggle-pwd" (click)="showRegPass=!showRegPass">👁️</button>
+          </div>
+        </div>
+        <div class="strength-bar-container">
+          <div class="strength-fill" id="strengthFill"
+            [style.width.%]="strengthPercent"
+            [style.background]="strengthColor"></div>
+        </div>
+        <div id="regErr" class="error-msg" *ngIf="regErr">{{ regErr }}</div>
+        <button class="btn-primary" (click)="doRegister()" [disabled]="loading">
+          {{ loading ? '…' : '⚡ CREATE ACCOUNT' }}
+        </button>
+        <div class="google-divider"><span>OR SIGN UP WITH</span></div>
+        <div id="googleSignInBtn2" class="google-btn-wrap"></div>
+        <p class="switch-prompt">Existing? <button class="switch-link" (click)="setTab('login')">sign in</button></p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<aside class="sidebar" id="sidebar">
+  <div class="logo-glow">QNTFY<span class="logo-slash">//</span></div>
+  <nav class="sidebar-nav">
+    <button class="nav-item" routerLink="/calculator" routerLinkActive="active">
+      <span class="nav-icon">🧮</span><span>CALCULATOR</span>
+    </button>
+    <button class="nav-item" [class.active]="isHistoryActive" (click)="onNavHistory()">
+      <span class="nav-icon">📜</span><span>HISTORY LOG</span>
+    </button>
+    <button class="nav-item" [class.active]="isProfileActive" (click)="onNavProfile()">
+      <span class="nav-icon">👤</span><span>PROFILE</span>
+    </button>
+  </nav>
+  <div class="user-mini" id="userMiniSection">
+    <div *ngIf="profile; else guestTpl" id="userLoggedIn" style="display:flex; align-items:center; gap:0.5rem; width:100%; flex-wrap:wrap;">
+      <div class="avatar-glow" id="navAvatar">{{ avatarLetter }}</div>
+      <div class="user-info">
+        <strong id="navUsername">{{ profile.Username }}</strong>
+        <span class="user-role">member</span>
+      </div>
+      <button class="logout-btn" (click)="logout()">⤒ EXIT</button>
+    </div>
+    <ng-template #guestTpl>
+      <div id="userGuest" style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; width:100%;">
+        <span style="font-size:0.65rem; opacity:0.5; letter-spacing:0.08em;">GUEST MODE</span>
+        <button class="btn-primary btn-sm" style="width:100%;" (click)="openAuthModal()">⚡ SIGN IN</button>
+      </div>
+    </ng-template>
+  </div>
+</aside>
